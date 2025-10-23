@@ -1,12 +1,11 @@
-import os
-import tempfile
 from concurrent.futures import ThreadPoolExecutor
-from typing import List, Dict
+from typing import Optional
 
 import whisperx
+from fastapi import HTTPException
 
-from config import ALIGN_MODEL, ALIGN_META, DEVICE, ASR_MODEL
-from loguru import logger
+from models.load import get_asr_model, ALIGN_MODEL, ALIGN_META, DEVICE
+from utils.logger import logger
 
 
 # def transcribe_channel(path: str) -> List[Dict]:
@@ -16,17 +15,50 @@ from loguru import logger
 #     aligned = whisperx.align(result["segments"], ALIGN_MODEL, ALIGN_META, audio_np, device=DEVICE)
 #     return aligned["word_segments"]
 
-def transcribe_channel(path: str, needs_alignment: bool = True, language: str = "en") -> List[Dict]:
-    # Pass language as an argument if your model supports it (check your model docs)
-    result = ASR_MODEL.transcribe(path, language=language)
+def transcribe_channel(
+        path: str,
+        language: Optional[str] = "en",
+        model: Optional[str] = "large-v3",
+        prompt: Optional[str] = None,
+        temperature: float = 0.0,
+        timestamp_granularity: str = "segment",
+        needs_alignment: bool = True
+) -> list:
+    # Ensure model is up to date
+    asr_model = get_asr_model(model)
+
+    # Pass prompt, temperature etc. to transcription call if supported
+    result = asr_model.transcribe(
+        path,
+        language=language,
+        prompt=prompt,
+        temperature=temperature,
+        timestamp_granularity=timestamp_granularity,
+    )
+
     if needs_alignment:
-        audio_np = whisperx.load_audio(path)  # load audio as np.ndarray for alignment
-        logger.info("Type: {}, Shape: {}", type(audio_np), audio_np.shape if hasattr(audio_np, "shape") else None)
-        aligned = whisperx.align(result["segments"], ALIGN_MODEL, ALIGN_META, audio_np, device=DEVICE)
-        return aligned["word_segments"]
+        try:
+            audio_np = whisperx.load_audio(path)
+            logger.info(f"Loaded audio shape for alignment: {audio_np.shape}")
+            aligned_result = whisperx.align_result(
+                result["segments"],
+                ALIGN_MODEL,
+                ALIGN_META,
+                audio_np,
+                device=DEVICE
+            )
+            # Choose granularities for timestamp output
+            if timestamp_granularity == "word":
+                final_result = aligned_result["word_segments"]
+            else:
+                final_result = aligned_result["segments"]
+            return final_result
+        except Exception as e:
+            logger.error(f"Alignment failed: {str(e)}")
+            return result.get("segments", [])
     else:
-        # Return just segment-level data if alignment isn't needed
-        return result["segments"]
+        # Return raw transcription segments or words per the asr model output format
+        return result.get("segments", [])
 
 def parallel_transcribe(paths, needs_alignment=True, language="pl"):
     results = []
