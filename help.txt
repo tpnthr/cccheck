@@ -1,0 +1,6 @@
+nvcc --version | grep release
+
+export CUDA_VERSION=11.8  # Example
+export CUDA_TAG=cu118   # Corresponding tag pattern e.g. cu113, cu118, cu121, etc.
+
+CUDA_VERSION=11.8 CUDA_TAG=cu118 docker-compose up --build
