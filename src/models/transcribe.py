@@ -4,7 +4,7 @@ from typing import Optional
 import whisperx
 from fastapi import HTTPException
 
-from models.load import get_asr_model, ALIGN_MODEL, ALIGN_META, DEVICE
+from models.load import get_asr_model, ALIGN_MODEL, ALIGN_META, DEVICE, get_align_model
 from utils.logger import logger
 
 
@@ -38,16 +38,12 @@ def transcribe_channel(
 
     if needs_alignment:
         try:
+            align_model, align_meta = get_align_model(language)
             audio_np = whisperx.load_audio(path)
-            logger.info(f"Loaded audio shape for alignment: {audio_np.shape}")
             aligned_result = whisperx.align_result(
-                result["segments"],
-                ALIGN_MODEL,
-                ALIGN_META,
-                audio_np,
-                device=DEVICE
+                result["segments"], align_model, align_meta, audio_np, device=align_model.device
             )
-            # Choose granularities for timestamp output
+            # Choose correct granularity for output
             if timestamp_granularity == "word":
                 final_result = aligned_result["word_segments"]
             else:
@@ -55,9 +51,10 @@ def transcribe_channel(
             return final_result
         except Exception as e:
             logger.error(f"Alignment failed: {str(e)}")
-            return result.get("segments", [])
+    # Return raw transcription segments or words per the asr model output format
+    if timestamp_granularity == "word":
+        return result.get("word_segments", [])
     else:
-        # Return raw transcription segments or words per the asr model output format
         return result.get("segments", [])
 
 def parallel_transcribe(paths, needs_alignment=True, language="pl"):
