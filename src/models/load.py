@@ -6,7 +6,7 @@ import whisperx
 from optuna.terminator.improvement.emmr import torch
 
 # Load config
-CONFIG_PATH = Path(__file__).parent / "config.json"
+CONFIG_PATH = Path(__file__).parent.parent / "config.json"
 with open(CONFIG_PATH, "r") as f:
     config = json.load(f)
 
