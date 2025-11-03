@@ -6,9 +6,11 @@ FROM pytorch/pytorch:${CUDA_TAG}-cuda${CUDA_VERSION}-cudnn9-runtime
 
 WORKDIR /app
 
+COPY requirements.txt ./
 COPY ./src /app
 
-RUN pip install --no-cache-dir uvicorn fastapi torch torchvision torchaudio \
-    && pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip \
+ && pip install --no-cache-dir uvicorn fastapi torch torchvision torchaudio \
+ && pip install --no-cache-dir -r requirements.txt
 
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8888", "--reload"]
