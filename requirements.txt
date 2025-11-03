@@ -3,6 +3,6 @@ uvicorn[standard]
 loguru
 requests
 soundfile
-transformers
+transformers>=4.30.0
 optuna
 whisperx @ git+https://github.com/m-bain/whisperX.git
