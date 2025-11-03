@@ -5,9 +5,10 @@ import uvicorn
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import JSONResponse, PlainTextResponse
 
-from config import APP_NAME, VERSION, DEVICE, WHISPER_MODEL, ALLOW_SHUTDOWN
+from config import APP_NAME, VERSION, ALLOW_SHUTDOWN
 from utils import logger
 from utils.logger import configure_logging, logger
+from models.load import DEVICE
 
 # Enable better GPU support
 # torch.backends.cuda.matmul.allow_tf32 = True
@@ -68,7 +69,7 @@ async def root():
 
 @app.get("/health")
 def health():
-    return {"success": True, "device": DEVICE, "model": WHISPER_MODEL}
+    return {"success": True, "device": DEVICE}
 
 
 @app.post("/shutdown")
