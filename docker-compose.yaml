@@ -1,16 +1,15 @@
-version: "3.8"
-
 services:
   speech2text:
-    image: pytorch/pytorch:{{CUDA_TAG}}-cuda{{CUDA_VERSION}}-cudnn8-runtime
+    build:
+      context: .
+      args:
+        CUDA_TAG: ${CUDA_TAG}
+        CUDA_VERSION: ${CUDA_VERSION}
     runtime: nvidia
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=compute,utility,graphics
       - PYTHONUNBUFFERED=1
-    volumes:
-      - ./src:/app
-    working_dir: /app
-    command: uvicorn app:app --host 0.0.0.0 --port 8000 --reload
+      - PORT=${PORT}
     ports:
-      - "8000:8000"
+      - "${PORT}:${PORT}"
