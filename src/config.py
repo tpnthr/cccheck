@@ -9,6 +9,8 @@ APP_NAME = config.get("app_name", "speech2text")
 VERSION = config.get("version", "0.0.1")
 ALLOW_SHUTDOWN = config.get("allow_shutdown", False)
 
+MAX_PAUSE = 1.5  # Max Pause of the fraze
+
 AUDIO_EXTENSIONS = {".wav", ".mp3", ".m4a", ".flac", ".ogg", ".opus", ".aac"}
 
 DATA_INPUT_DIR = pathlib.Path("data/input")

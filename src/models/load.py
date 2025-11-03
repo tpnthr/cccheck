@@ -18,7 +18,7 @@ _model_lock = threading.Lock()
 _current_model_name = None
 _current_model_instance = None
 
-MAX_PAUSE = 1.5  # Max Pause of the fraze
+
 # Preload align model
 ALIGN_MODEL_NAME = "jonatasgrosman/wav2vec2-large-xlsr-53-polish"
 ALIGN_MODEL, ALIGN_META = whisperx.load_align_model(language_code="pl", device=DEVICE, model_name=ALIGN_MODEL_NAME)
