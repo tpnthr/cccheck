@@ -6,6 +6,8 @@ FROM pytorch/pytorch:${CUDA_TAG}-cuda${CUDA_VERSION}-cudnn9-runtime
 
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y git
+
 COPY requirements.txt ./
 COPY ./src /app
 
