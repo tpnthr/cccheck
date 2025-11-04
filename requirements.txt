@@ -4,5 +4,6 @@ loguru
 requests
 soundfile
 transformers>=4.30.0
+tokenizers
 optuna
 whisperx @ git+https://github.com/m-bain/whisperX.git
