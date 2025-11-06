@@ -7,6 +7,7 @@ FROM pytorch/pytorch:${CUDA_TAG}-cuda${CUDA_VERSION}-cudnn9-runtime
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y git
+RUN apt-get update && apt-get install -y ffmpeg
 
 COPY requirements.txt ./
 COPY ./src /app
