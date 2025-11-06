@@ -5,12 +5,12 @@ FROM nvidia/cuda:${CUDA_TAG}
 ARG CUDA_VERSION
 ENV DEBIAN_FRONTEND=noninteractive
 
-# System deps (preserve git + ffmpeg as requested)
+# System dependencies
 RUN apt-get update && apt-get install -y \
     git ffmpeg python3.11 python3.11-venv python3-pip \
-    && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/*
 
-# Map CUDA_VERSION -> PyTorch wheel suffix and install matching wheels
+# PyTorch matching the CUDA version
 RUN python3.11 -m pip install --no-cache-dir --upgrade pip && \
     if [ -z "${CUDA_VERSION}" ]; then echo "CUDA_VERSION is empty"; exit 1; fi && \
     if [ "${CUDA_VERSION}" = "12.4" ]; then \
@@ -26,16 +26,17 @@ RUN python3.11 -m pip install --no-cache-dir --upgrade pip && \
       torchaudio==2.1.2+${PYTORCH_CUDA_SUFFIX} \
       -f https://download.pytorch.org/whl/torch_stable.html
 
+# App setup
 WORKDIR /app
-
-# Keep your original steps verbatim
-RUN apt-get update && apt-get install -y git
-RUN apt-get update && apt-get install -y ffmpeg
-
 COPY requirements.txt ./
+RUN python3.11 -m pip install --no-cache-dir -r requirements.txt
+
+# Copy source
 COPY ./src /app
 
-RUN pip install --upgrade pip \
- && pip install --no-cache-dir -r requirements.txt
+# Useful envs
+ENV PATH="/root/.local/bin:${PATH}"
+ENV HF_HOME="/root/.cache/huggingface"
 
+# App entry
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8888", "--reload"]

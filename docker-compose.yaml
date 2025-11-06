@@ -5,10 +5,17 @@ services:
       args:
         CUDA_TAG: ${CUDA_TAG}
         CUDA_VERSION: ${CUDA_VERSION}
-    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: ["gpu"]
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=compute,utility,graphics
+      - HF_TOKEN=${HF_TOKEN}
       - PYTHONUNBUFFERED=1
       - PORT=${PORT}
     ports:
