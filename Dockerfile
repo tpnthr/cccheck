@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
 
 # Map CUDA_VERSION -> PyTorch wheel suffix and install matching wheels
 RUN python3.11 -m pip install --no-cache-dir --upgrade pip && \
+    if [ -z "${CUDA_VERSION}" ]; then echo "CUDA_VERSION is empty"; exit 1; fi && \
     if [ "${CUDA_VERSION}" = "12.4" ]; then \
       PYTORCH_CUDA_SUFFIX=cu124; \
     elif [ "${CUDA_VERSION}" = "12.1" ]; then \
@@ -26,6 +27,10 @@ RUN python3.11 -m pip install --no-cache-dir --upgrade pip && \
       -f https://download.pytorch.org/whl/torch_stable.html
 
 WORKDIR /app
+
+# Keep your original steps verbatim
+RUN apt-get update && apt-get install -y git
+RUN apt-get update && apt-get install -y ffmpeg
 
 COPY requirements.txt ./
 COPY ./src /app
