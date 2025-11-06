@@ -4,6 +4,7 @@ loguru
 requests
 soundfile
 optuna
-transformers==4.31.0
-whisperx @ git+https://github.com/m-bain/whisperX.git@v3.3.0
+whisperx==3.3.1
+transformers>=4.44,<5
+huggingface_hub>=0.24
 matplotlib
