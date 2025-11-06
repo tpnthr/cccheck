@@ -31,7 +31,6 @@ def transcribe_channel(
     result = asr_model.transcribe(
         path,
         language=language,
-        prompt=prompt,
         temperature=temperature,
         timestamp_granularity=timestamp_granularity,
     )
