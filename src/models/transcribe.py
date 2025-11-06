@@ -16,18 +16,16 @@ from utils.logger import logger
 #     return aligned["word_segments"]
 
 def transcribe_channel(
-        path: str,
-        language: Optional[str] = "en",
-        model: Optional[str] = "large-v3",
-        prompt: Optional[str] = None,
-        temperature: float = 0.0,
-        timestamp_granularity: str = "segment",
-        needs_alignment: bool = True
+    path: str,
+    language: Optional[str] = "en",
+    model: Optional[str] = "large-v3",
+    temperature: float = 0.0,
+    timestamp_granularity: str = "segment",
+    needs_alignment: bool = True,
 ) -> list:
-    # Ensure model is up to date
     asr_model = get_asr_model(model)
 
-    # Pass prompt, temperature etc. to transcription call if supported
+    # Only pass supported kwargs
     result = asr_model.transcribe(
         path,
         language=language,
@@ -37,25 +35,17 @@ def transcribe_channel(
     )
 
     if needs_alignment:
-        try:
-            align_model, align_meta = get_align_model(language)
-            audio_np = whisperx.load_audio(path)
-            aligned_result = whisperx.align_result(
-                result["segments"], align_model, align_meta, audio_np, device=align_model.device
-            )
-            # Choose correct granularity for output
-            if timestamp_granularity == "word":
-                final_result = aligned_result["word_segments"]
-            else:
-                final_result = aligned_result["segments"]
-            return final_result
-        except Exception as e:
-            logger.error(f"Alignment failed: {str(e)}")
-    # Return raw transcription segments or words per the asr model output format
-    if timestamp_granularity == "word":
-        return result.get("word_segments", [])
-    else:
-        return result.get("segments", [])
+        audio_np = whisperx.load_audio(path)
+        aligned = whisperx.align(
+            result["segments"],
+            ALIGN_MODEL,
+            ALIGN_META,
+            audio_np,
+            device=DEVICE,
+        )
+        return aligned["word_segments"] if timestamp_granularity == "word" else result["segments"]
+
+    return result["segments"]
 
 def parallel_transcribe(paths, needs_alignment=True, language="pl"):
     results = []
