@@ -7,3 +7,4 @@ optuna
 transformers==4.31.0
 whisperx @ git+https://github.com/m-bain/whisperX.git@v3.3.0
 matplotlib
+ffmpeg
