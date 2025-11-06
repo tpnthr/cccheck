@@ -12,19 +12,19 @@ with open(CONFIG_PATH, "r") as f:
     config = json.load(f)
 
 USE_CPU = os.getenv("USE_CPU") == "1"
-if USE_CPU:
-    DEVICE = "cpu"
-else:
-    DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-
-ALIGN_MODEL_NAME = os.getenv("ALIGN_MODEL_NAME", "facebook/wav2vec2-large-xlsr-53")
-
+DEVICE = "cpu" if USE_CPU else ("cuda" if torch.cuda.is_available() else "cpu")
 TORCH_DTYPE = torch.float16 if DEVICE == "cuda" else torch.float32
+
 MODEL_LOCK = threading.Lock()
 _current_model_name = None
 _current_model_instance = None
 
-ALIGN_MODEL, ALIGN_META = whisperx.load_align_model(language_code="pl", device=DEVICE, model_name=ALIGN_MODEL_NAME)
+# Let WhisperX choose the best align model for the language
+ALIGN_MODEL, ALIGN_META = whisperx.load_align_model(
+    language_code="pl",
+    device=DEVICE,
+    model_name=None,  # auto-select
+)
 
 def get_asr_model(model_name: str):
     global _current_model_name, _current_model_instance
