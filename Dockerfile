@@ -12,7 +12,6 @@ COPY requirements.txt ./
 COPY ./src /app
 
 RUN pip install --upgrade pip \
- && pip install --no-cache-dir uvicorn fastapi torch torchvision torchaudio \
  && pip install --no-cache-dir -r requirements.txt
 
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8888", "--reload"]
