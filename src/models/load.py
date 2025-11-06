@@ -17,12 +17,13 @@ if USE_CPU:
 else:
     DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
+ALIGN_MODEL_NAME = os.getenv("ALIGN_MODEL_NAME", "facebook/wav2vec2-large-xlsr-53")
+
 TORCH_DTYPE = torch.float16 if DEVICE == "cuda" else torch.float32
 MODEL_LOCK = threading.Lock()
 _current_model_name = None
 _current_model_instance = None
 
-ALIGN_MODEL_NAME = "jonatasgrosman/wav2vec2-large-xlsr-53-polish"
 ALIGN_MODEL, ALIGN_META = whisperx.load_align_model(language_code="pl", device=DEVICE, model_name=ALIGN_MODEL_NAME)
 
 def get_asr_model(model_name: str):
