@@ -37,7 +37,6 @@ def get_asr_model(model_name: str):
             _current_model_instance = whisperx.load_model(
                 model_name,
                 device=DEVICE,
-                device_id=None,
                 compute_type="float16" if DEVICE == "cuda" else "float32"
             )
             _current_model_name = model_name
