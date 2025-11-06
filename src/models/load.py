@@ -4,7 +4,7 @@ import threading
 from pathlib import Path
 
 import whisperx
-from optuna.terminator.improvement.emmr import torch
+import torch
 
 # Load config
 CONFIG_PATH = Path(__file__).parent.parent / "config.json"
