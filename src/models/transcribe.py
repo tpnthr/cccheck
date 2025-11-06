@@ -33,7 +33,7 @@ def transcribe_channel(
         language=language,
         # prompt=prompt,
         # temperature=temperature,
-        timestamp_granularity=timestamp_granularity,
+        # timestamp_granularity=timestamp_granularity,
     )
 
     if needs_alignment:
