@@ -1,9 +1,10 @@
 /data/input/*
 /data/output/*
 /data/temp/*
-test/.env
+.env
 /.venv/
 /src/data/input/*
 /src/data/output/*
 /src/data/temp/*
 /src/logs/*
+/.env

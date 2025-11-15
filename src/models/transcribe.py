@@ -4,7 +4,7 @@ from typing import Optional
 import whisperx
 from fastapi import HTTPException
 
-from models.load import get_asr_model, ALIGN_MODEL, ALIGN_META, DEVICE, get_align_model
+from models.load import get_asr_model, ALIGN_MODEL, ALIGN_META, DEVICE
 from utils.logger import logger
 
 
