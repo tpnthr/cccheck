@@ -8,3 +8,4 @@ whisperx==3.3.1
 transformers>=4.44,<5
 huggingface_hub>=0.24
 matplotlib
+nvidia-cudnn
