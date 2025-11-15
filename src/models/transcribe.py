@@ -16,12 +16,13 @@ from utils.logger import logger
 #     return aligned["word_segments"]
 
 def transcribe_channel(
-    path: str,
-    language: Optional[str] = "en",
-    model: Optional[str] = "large-v3",
-    temperature: float = 0.0,
-    timestamp_granularity: str = "segment",
-    needs_alignment: bool = True,
+        path: str,
+        language: Optional[str] = "en",
+        model: Optional[str] = "large-v3",
+        prompt: Optional[str] = None,
+        temperature: float = 0.0,
+        timestamp_granularity: str = "segment",
+        needs_alignment: bool = True,
 ) -> list:
     asr_model = get_asr_model(model)
 
@@ -46,6 +47,7 @@ def transcribe_channel(
         return aligned["word_segments"] if timestamp_granularity == "word" else result["segments"]
 
     return result["segments"]
+
 
 def parallel_transcribe(paths, needs_alignment=True, language="pl"):
     results = []

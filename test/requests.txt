@@ -1,0 +1,13 @@
+---Stereo---
+{
+  "fileUrl": "string",
+  "language": "pl",
+  "model": "large-v3",
+  "responseFormat": "json",
+  "temperature": 0,
+  "timestamp_granularity": "segment",
+  "need_alignment": true,
+  "label_speakers": false
+}
+
+---Mono---
