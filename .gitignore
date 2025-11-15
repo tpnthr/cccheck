@@ -1,7 +1,7 @@
 /data/input/*
 /data/output/*
 /data/temp/*
-.env
+test/.env
 /.venv/
 /src/data/input/*
 /src/data/output/*
