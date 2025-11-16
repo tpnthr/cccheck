@@ -1,27 +1,30 @@
-# Use NVIDIA CUDA 13.0 base image
-FROM nvidia/cuda:13.0.0-devel-ubuntu22.04
+# CUDA base remains configurable via CUDA_TAG
+ARG CUDA_TAG
+FROM nvidia/cuda:${CUDA_TAG}
 
-# Install system deps
-RUN apt-get update && apt-get install -y python3.11 python3.11-venv python3-pip git ffmpeg \
-    && rm -rf /var/lib/apt/lists/*
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Create virtual environment
-RUN python3.11 -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
+# System deps
+RUN apt-get update && apt-get install -y \
+    git ffmpeg python3.11 python3.11-venv python3-pip \
+  && rm -rf /var/lib/apt/lists/*
 
-# Upgrade pip and install PyTorch nightly for CUDA 13
-RUN pip install --upgrade pip
-RUN pip install torch torchvision torchaudio --index-url --pre https://download.pytorch.org/whl/nightly/cu13
+# Modern PyTorch: install from the cu128 wheel index
+# Pin to a recent trio known to ship cu128 wheels
+RUN python3.11 -m pip install --no-cache-dir --upgrade pip && \
+    python3.11 -m pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cu128 \
+      torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0
 
 # App setup
 WORKDIR /app
 COPY requirements.txt ./
-RUN pip install -r requirements.txt
+RUN python3.11 -m pip install --no-cache-dir -r requirements.txt
 
-# Copy source code
+# Copy source
 COPY ./src /app
 
 # Useful envs
+ENV PATH="/root/.local/bin:${PATH}"
 ENV HF_HOME="/root/.cache/huggingface"
 
 # App entry
