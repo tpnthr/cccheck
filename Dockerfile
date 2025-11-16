@@ -5,7 +5,7 @@ FROM nvidia/cuda:${CUDA_TAG}
 ENV DEBIAN_FRONTEND=noninteractive
 
 # System deps
-RUN apt-get update && apt-get install -y libcudnn8 libcudnn8-dev
+RUN apt-get update && apt-get install -y libcudnn9 libcudnn9-dev
 
 RUN apt-get update && apt-get install -y \
     git ffmpeg python3.11 python3.11-venv python3-pip \
