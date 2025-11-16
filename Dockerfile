@@ -11,7 +11,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 
 # Upgrade pip and install PyTorch nightly for CUDA 13
 RUN pip install --upgrade pip
-RUN pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu13
+RUN pip install torch torchvision torchaudio --index-url --pre https://download.pytorch.org/whl/nightly/cu13
 
 # App setup
 WORKDIR /app
