@@ -4,10 +4,11 @@ FROM nvidia/cuda:${CUDA_TAG}
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# System deps
+# Add this before installing Python packages
 RUN apt-get update && apt-get install -y \
-    libcudnn9-cuda-13 \
-    libcudnn9-dev-cuda-13
+    libcudnn8=8.9.2.*-1+cuda13.0 \
+    libcudnn8-dev=8.9.2.*-1+cuda13.0 \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && apt-get install -y \
     git ffmpeg python3.11 python3.11-venv python3-pip \
