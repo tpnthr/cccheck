@@ -2,6 +2,8 @@ services:
   app:
     build:
       context: .
+      # CUDA_TAG / CUDA_VERSION no longer used by the Dockerfile, but keeping these
+      # args is harmless; they will just be ignored by the base image.
       args:
         CUDA_TAG: ${CUDA_TAG}
         CUDA_VERSION: ${CUDA_VERSION}

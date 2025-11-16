@@ -1,6 +1,5 @@
-# CUDA base remains configurable via CUDA_TAG
-ARG CUDA_TAG
-FROM nvidia/cuda:${CUDA_TAG}
+# No need for CUDA_TAG here; we use a ready-made runtime with CUDA + cuDNN + PyTorch
+FROM pytorch/pytorch:2.3.1-cuda11.8-cudnn8-runtime
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -9,18 +8,15 @@ RUN apt-get update && apt-get install -y \
     git ffmpeg python3.11 python3.11-venv python3-pip \
   && rm -rf /var/lib/apt/lists/*
 
-# Modern PyTorch: install from the cu128 wheel index
-# Pin to a recent trio known to ship cu128 wheels
-RUN python3.11 -m pip install --no-cache-dir --upgrade pip && \
-    python3.11 -m pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cu128 \
-      torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0
-
 # App setup
 WORKDIR /app
-COPY requirements.txt ./
-RUN python3.11 -m pip install --no-cache-dir -r requirements.txt
 
-# Copy source
+# If you have requirements.txt, keep this block
+COPY requirements.txt ./
+RUN python3.11 -m pip install --no-cache-dir --upgrade pip && \
+    python3.11 -m pip install --no-cache-dir -r requirements.txt
+
+# Copy source code
 COPY ./src /app
 
 # Useful envs
