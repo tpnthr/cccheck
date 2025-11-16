@@ -17,6 +17,8 @@ COPY requirements.txt ./
 RUN python3.11 -m pip install --no-cache-dir --upgrade pip && \
     python3.11 -m pip install --no-cache-dir \
       torch==2.3.1 torchaudio==2.3.1 && \
+    python3.11 -m pip install --no-cache-dir \
+      whisperx==3.3.1 pyannote.audio==3.3.2 && \
     python3.11 -m pip install --no-cache-dir -r requirements.txt
 # Copy source code
 COPY ./src /app
