@@ -1,0 +1,34 @@
+---System Update---
+sudo apt update
+sudo apt upgrade -y
+sudo apt install -y gcc make curl git apt-transport-https ca-certificates software-properties-common
+
+---Nvidia Drivers---
+sudo add-apt-repository ppa:graphics-drivers/ppa
+sudo apt update
+sudo apt install -y nvidia-driver-570-server-open
+sudo reboot
+
+---Docker download---
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io
+sudo systemctl enable docker
+sudo systemctl start docker
+
+---Nvidia Toolkit---
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+sudo apt update
+sudo apt install -y nvidia-docker2 nvidia-container-toolkit
+sudo systemctl restart docker
+
+---Docker compose install---
+sudo apt install -y docker-compose-plugin
+
+---FFmpeg---
+sudo apt install ffmpeg
+
+---CudNN---
+sudo apt-get update
+sudo apt-get install -y libcudnn8 libcudnn8-dev
