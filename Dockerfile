@@ -10,19 +10,20 @@ RUN apt-get update && apt-get install -y \
     libcudnn9-dev-cuda-13
 
 RUN apt-get update && apt-get install -y \
-    git ffmpeg python3.10 python3.10-venv python3-pip \
+    git ffmpeg \
   && rm -rf /var/lib/apt/lists/*
 
 # Modern PyTorch: install from the cu128 wheel index
 # Pin to a recent trio known to ship cu128 wheels
-RUN python3.10 -m pip install --no-cache-dir --upgrade pip && \
-    python3.10 -m pip install --index-url https://download.pytorch.org/whl/nightly/cu13 torch torchvision torchaudio --upgrade
+RUN apt-get install -y python3.9 python3.9-venv python3-pip
+RUN python3.9 -m pip install --upgrade pip
+RUN python3.9 -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu13
 
 
 # App setup
 WORKDIR /app
 COPY requirements.txt ./
-RUN python3.10 -m pip install --no-cache-dir -r requirements.txt
+RUN python3.9 -m pip install --no-cache-dir -r requirements.txt
 
 # Copy source
 COPY ./src /app
