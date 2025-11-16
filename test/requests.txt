@@ -1,6 +1,6 @@
 ---Stereo---
 {
-  "fileUrl": "string",
+  "fileUrl": "https://n8n.xaia.cloud/webhook/getrec?filename=00054/2025-10-14/2025-10-14_09.38.46-48886591663-1760427525.26298.ogg",
   "language": "pl",
   "model": "large-v3",
   "responseFormat": "json",
