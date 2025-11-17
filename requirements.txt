@@ -5,7 +5,7 @@ requests
 soundfile
 optuna
 whisperx @ git+https://github.com/m-bain/whisperX.git@main
-transformers>=4.44,<5
+transformers==4.41.2
 datasets>=2.14.0
 huggingface_hub>=0.24
 matplotlib
