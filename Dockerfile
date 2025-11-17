@@ -11,7 +11,6 @@ RUN apt-get update && apt-get install -y \
     git \
     ffmpeg \
     pkg-config \
-    # ↓↓↓ ДОБАВЛЯЕМ ПАКЕТЫ РАЗРАБОТЧИКА FFmpeg ↓↓↓
     libavformat-dev \
     libavcodec-dev \
     libavdevice-dev \
