@@ -4,7 +4,7 @@ loguru
 requests
 soundfile
 optuna
-whisperx @ git+https://github.com/m-bain/whisperX/commit/dc4e3b44a03a6c4fa2f5cb0f29010e981b47f30e
+whisperx
 transformers==4.41.2
 datasets>=2.14.0
 huggingface_hub>=0.24
