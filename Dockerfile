@@ -1,7 +1,8 @@
 ARG CUDA_TAG=2.7.0
 ARG CUDA_VERSION=12.8
 
-FROM pytorch/pytorch:${CUDA_TAG}-cuda${CUDA_VERSION}-cudnn9-devel
+FROM pytorch/pytorch:2.7.0-cuda12.8-cudnn9-runtime
+
 
 WORKDIR /app
 
@@ -14,6 +15,6 @@ COPY ./src /app
 RUN pip install --upgrade pip \
  && pip install --no-cache-dir -r requirements.txt
 
-RUN pip uninstall -y torchaudio && pip install torchaudio==2.9.1+cu130 --index-url https://download.pytorch.org/whl/cu130
+RUN pip uninstall -y torchaudio && pip install torchaudio==2.0.2+cu128 --index-url https://download.pytorch.org/whl/cu128
 
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8888", "--reload"]
