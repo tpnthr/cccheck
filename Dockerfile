@@ -14,4 +14,6 @@ COPY ./src /app
 RUN pip install --upgrade pip \
  && pip install --no-cache-dir -r requirements.txt
 
+RUN pip install --upgrade torchaudio
+
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8888", "--reload"]
