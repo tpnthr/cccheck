@@ -1,31 +1,17 @@
-# No need for CUDA_TAG here; we use a ready-made runtime with CUDA + cuDNN + PyTorch
-FROM pytorch/pytorch:2.3.1-cuda11.8-cudnn8-runtime
+ARG CUDA_TAG=2.7.0
+ARG CUDA_VERSION=12.8
 
-ENV DEBIAN_FRONTEND=noninteractive
+FROM pytorch/pytorch:${CUDA_TAG}-cuda${CUDA_VERSION}-cudnn9-runtime
 
-# System deps
-RUN apt-get update && apt-get install -y \
-    git ffmpeg python3.11 python3.11-venv python3-pip \
-  && rm -rf /var/lib/apt/lists/*
-
-# App setup
 WORKDIR /app
 
-# If you have requirements.txt, keep this block
-COPY requirements.txt ./
+RUN apt-get update && apt-get install -y git
+RUN apt-get update && apt-get install -y ffmpeg
 
-RUN python3.11 -m pip install --no-cache-dir --upgrade pip && \
-    python3.11 -m pip install --no-cache-dir \
-      torch==2.3.1 torchaudio==2.3.1 && \
-    python3.11 -m pip install --no-cache-dir \
-      whisperx==3.3.1 pyannote.audio==3.3.2 && \
-    python3.11 -m pip install --no-cache-dir -r requirements.txt
-# Copy source code
+COPY requirements.txt ./
 COPY ./src /app
 
-# Useful envs
-ENV PATH="/root/.local/bin:${PATH}"
-ENV HF_HOME="/root/.cache/huggingface"
+RUN pip install --upgrade pip \
+ && pip install --no-cache-dir -r requirements.txt
 
-# App entry
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8888", "--reload"]

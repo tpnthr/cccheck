@@ -1,21 +1,14 @@
 services:
-  app:
+  speech2text:
     build:
       context: .
-      # CUDA_TAG / CUDA_VERSION no longer used by the Dockerfile, but keeping these
-      # args is harmless; they will just be ignored by the base image.
       args:
         CUDA_TAG: ${CUDA_TAG}
         CUDA_VERSION: ${CUDA_VERSION}
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - capabilities: [gpu]
+    runtime: nvidia
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
-      - NVIDIA_DRIVER_CAPABILITIES=all
-      - HF_TOKEN=${HF_TOKEN}
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility,graphics
       - PYTHONUNBUFFERED=1
       - PORT=${PORT}
     ports:
