@@ -1,7 +1,7 @@
 ARG CUDA_TAG=2.7.0
 ARG CUDA_VERSION=12.8
 
-FROM pytorch/pytorch:${CUDA_TAG}-cuda${CUDA_VERSION}-cudnn9-runtime
+FROM pytorch/pytorch:${CUDA_TAG}-cuda${CUDA_VERSION}-cudnn9-devel
 
 WORKDIR /app
 
