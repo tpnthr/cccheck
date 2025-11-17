@@ -7,8 +7,10 @@ FROM pytorch/pytorch:2.3.1-cuda12.1-cudnn8-runtime
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y git \
- && apt-get install -y ffmpeg \
+RUN apt-get update && apt-get install -y \
+    git \
+    ffmpeg \
+    pkg-config \
  && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt ./
