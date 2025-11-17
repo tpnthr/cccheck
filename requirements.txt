@@ -6,5 +6,6 @@ soundfile
 optuna
 whisperx==3.3.1
 transformers>=4.44,<5
+datasets>=2.14.0
 huggingface_hub>=0.24
 matplotlib

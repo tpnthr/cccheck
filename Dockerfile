@@ -14,6 +14,6 @@ COPY ./src /app
 RUN pip install --upgrade pip \
  && pip install --no-cache-dir -r requirements.txt
 
-RUN pip uninstall -y torch torchaudio && pip install torch==2.1.0+cu130 torchaudio==2.1.0+cu130 --index-url https://download.pytorch.org/whl/cu130
+RUN pip uninstall -y torchaudio && pip install torchaudio==2.9.1+cu130 --index-url https://download.pytorch.org/whl/cu130
 
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8888", "--reload"]
