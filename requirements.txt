@@ -5,6 +5,7 @@ requests
 soundfile
 optuna
 whisperx
+transformers==4.39.3
 datasets>=2.14.0
 huggingface_hub>=0.24
 matplotlib
