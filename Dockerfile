@@ -9,7 +9,7 @@ WORKDIR /app
 
 RUN apt-get update && apt-get install -y git \
  && apt-get install -y ffmpeg \
- && rm -rf /var/lib/apt/lists/* # (Добавил очистку)
+ && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt ./
 RUN pip install --upgrade pip \
